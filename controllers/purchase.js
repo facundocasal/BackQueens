@@ -107,14 +107,15 @@ const createPaymentmercado = async (req, res) => {
 
 const createPaymentpaypal = async (req, res) => {
   try {
-    const { userName, gallerieName, queen, price } = req.body
-    const newPurchase = {
+    const { userName, gallerieName, queen, price_USD } = req.body
+    const newPurchase = await new Purchase({
       userName: userName,
       gallerieName: gallerieName,
       queen: queen,
-      price: price,
-    }
-    await Purchase.create(newPurchase)
+      price: price_USD,
+      Available : true
+    })
+    await newPurchase.save()
     res.status(201).json(newPurchase)
   }
   catch (err) {

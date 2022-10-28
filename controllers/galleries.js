@@ -57,9 +57,6 @@ const createGalleries = async (req, res) => {
       price_USD,
       photos
     })
-    newGallery.photos.forEach(e =>{
-      console.log(`holaa ${e}`)
-    })
     await newGallery.save()
     res.json(`Gallery created successfully`)
   }

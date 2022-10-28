@@ -9,6 +9,8 @@ const purchase = new Schema({
         type:String , required: true},
     price: {
         type:Number , required: true} ,
+    Available: {
+            type: Boolean , required: true} ,
 },
     {
         timestamps: true,
