@@ -21,6 +21,14 @@ const getuserPurchase = async (req, res) => {
   res.json(userPurchase)
 }
 
+// obterner por id 
+
+const getPurchaseById = async (req, res)=>{
+  const {id} = req.params
+  const respuesta = await Purchase.findById(id)
+  res.json(respuesta)
+}
+
 
 // devuelve las compras asosiadas a una queen 
 
@@ -32,8 +40,7 @@ const getQueensPurchase = async (req, res) => {
 // obtener la galeria y imagenes si el usuario compro esa galeria devuelve todas las imagenes sino devuelve 4 
 const getGaleryPuchaseUser = async (req, res) => {
   const { user, gallerieName } = req.params
-  const userPurchase = await Purchase.find({ userName: user })
-  res.json(userPurchase)
+  const userPurchase = await Purchase.find({ userName: user , Available : true})
   if (!userPurchase || userPurchase === "undefined") {
     const galleryPhotos = await Galeries.find({ gallerieName: gallerieName }, "photos",)
     const galleryNoPurchase = galleryPhotos.slice(0, 4)
@@ -42,7 +49,6 @@ const getGaleryPuchaseUser = async (req, res) => {
   const galleryPhotos = await Galeries.find({ gallerieName: gallerieName }, "photos")
   res.json(galleryPhotos.photos)
 }
-
 
 // crear compra mercadoPago 
 
@@ -108,6 +114,7 @@ const createPaymentmercado = async (req, res) => {
 const createPaymentpaypal = async (req, res) => {
   try {
     const { userName, gallerieName, queen, price_USD } = req.body
+    
     const newPurchase = await new Purchase({
       userName: userName,
       gallerieName: gallerieName,
@@ -122,6 +129,7 @@ const createPaymentpaypal = async (req, res) => {
     console.log(err)
   }
 }
+
 
 const paypalOrder = async (req, res) => {
   const soli = new paypal.orders.OrdersCreateRequest();
@@ -151,5 +159,6 @@ module.exports = {
   getGaleryPuchaseUser,
   createPaymentpaypal,
   paypalOrder,
-  getuserPurchase
+  getuserPurchase,
+  getPurchaseById
 };

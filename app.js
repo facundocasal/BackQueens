@@ -4,7 +4,8 @@ const express = require('express');
 const path = require('path');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
-const cors = require('cors')
+const cors = require('cors');
+const CronJob = require('cron').CronJob;
 
 const indexRouter = require('./routes/index');
 const userRouter = require('./routes/users');
@@ -14,7 +15,9 @@ const galleriesRouter = require('./routes/galleries')
 const carouselRouter = require('./routes/carousel')
 const purchaseRouter = require('./routes/purchase');
 const routesMercadoPago = require("./routes/mercadoPago")
+const { ubdateSuscriptcion , pruebaCron } = require("./util/cronUpdate")
 const app = express();
+const cron = new CronJob(process.env.CRON_TEST, pruebaCron)
 
 
 // view engine setup
@@ -35,8 +38,7 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-
-
+cron.start()
 
 
 

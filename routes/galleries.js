@@ -1,5 +1,6 @@
 const { Router } = require('express')
 const route = Router()
+const { jwtValidator } = require('../middleware/jwt');
 const { body } = require('express-validator')
 const { 
   createGalleries ,
@@ -34,7 +35,7 @@ route
   
   .post("/updateGallerie", updateGallerie )
   // borrar galeria por id
-  .delete("/delete/:id", deleteGallerie)
+  .delete("/delete/:id", jwtValidator, deleteGallerie)
 
   
 module.exports = route
