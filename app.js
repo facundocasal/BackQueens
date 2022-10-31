@@ -15,9 +15,9 @@ const galleriesRouter = require('./routes/galleries')
 const carouselRouter = require('./routes/carousel')
 const purchaseRouter = require('./routes/purchase');
 const routesMercadoPago = require("./routes/mercadoPago")
-const { ubdateSuscriptcion , pruebaCron } = require("./util/cronUpdate")
+const { ubdateSuscriptcion } = require("./util/cronUpdate")
 const app = express();
-const cron = new CronJob(process.env.CRON_TEST, pruebaCron)
+const cron = new CronJob(process.env.CRON_TIME, ubdateSuscriptcion)
 
 
 // view engine setup

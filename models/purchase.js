@@ -9,8 +9,13 @@ const purchase = new Schema({
         type:String , required: true},
     price: {
         type:Number , required: true} ,
+    method: {
+        type:String , required: true} ,
     Available: {
-            type: Boolean , required: true} ,
+        type: Boolean , required: true} ,
+    commission:{
+        type:Number
+    }
 },
     {
         timestamps: true,

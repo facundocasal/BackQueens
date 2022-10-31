@@ -2,7 +2,7 @@ const { validationResult } = require('express-validator')
 const Galleries = require('../models/galleries')
 
 // obtener todas las galerias 
-const getGalleries = async (req , res ) => {
+const getGalleries = async (req, res) => {
   const galleries = await Galleries.find()
   res.json(galleries)
 }
@@ -23,9 +23,9 @@ const getGallerieByQueen = async (req, res) => {
 
 // galerias por nombre Galeria  
 const getGallerieBygalleryName = async (req, res) => {
-  const { queen , galleryName } = req.params
+  const { queen, galleryName } = req.params
   console.log(`${queen} , ${galleryName}`)
-  const gallery = await Galleries.find({ idQueen: queen , galleryName: galleryName })
+  const gallery = await Galleries.find({ idQueen: queen, galleryName: galleryName })
   console.log(gallery)
   res.json(gallery)
 }
@@ -34,19 +34,19 @@ const getGallerieBygalleryName = async (req, res) => {
 const createGalleries = async (req, res) => {
   const errors = validationResult(req)
   if (!errors.isEmpty()) {
-    return res.status(400).json({errors: 'Algo salió mal'})
+    return res.status(400).json({ errors: 'Algo salió mal' })
   }
   try {
-    const { 
+    const {
       idQueen,
-      photosShow, 
-      photoBlur, 
-      galleryName, 
-      price, 
-      price_USD, 
-      coverPhotoGallery, 
+      photosShow,
+      photoBlur,
+      galleryName,
+      price,
+      price_USD,
+      coverPhotoGallery,
       photos } = req.body
-      
+
     const newGallery = await new Galleries({
       idQueen,
       galleryName,
@@ -68,16 +68,16 @@ const createGalleries = async (req, res) => {
 }
 
 // modificar galeria
-const updateGallerie = async ( req, res) =>{
-  await Galleries.updateOne({_id : req.body._id},{$set : req.body})
-  res.json( {message : "Gallery updated"})
+const updateGallerie = async (req, res) => {
+  await Galleries.updateOne({ _id: req.body._id }, { $set: req.body })
+  res.json({ message: "Gallery updated" })
 }
 
 // borrar galeria 
-const deleteGallerie = async (req , res ) => {
-  const {id} = req.params
+const deleteGallerie = async (req, res) => {
+  const { id } = req.params
   await Galleries.findByIdAndDelete(id)
-  res.json({data : "Gallery deleted"})
+  res.json({ data: "Gallery deleted" })
 }
 
 
@@ -88,8 +88,8 @@ module.exports = {
   createGalleries,
   getGallerieById,
   getGallerieByQueen,
-  getGalleries ,
+  getGalleries,
   getGallerieBygalleryName,
   deleteGallerie,
-  updateGallerie 
+  updateGallerie
 }

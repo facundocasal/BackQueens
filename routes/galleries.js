@@ -28,6 +28,8 @@ route
   // body('galleryName').trim().escape().isAlpha('es-ES', {ignore: ''}).not().isEmpty().isLength({min: 3, max: 30}),
   body('galleryName').trim().escape().not().isEmpty().isLength({min: 3, max: 30}),
   body('coverPhotoGallery'),
+  body('[photosShow]'),
+  body('photoBlur'),
   body('price').trim().escape().isNumeric().isLength({min: 2, max: 6}),
   body('price_USD').trim().escape().isNumeric().isLength({min: 2, max: 6}),
   body('[photos]'),

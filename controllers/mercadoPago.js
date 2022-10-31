@@ -11,7 +11,7 @@ class MercadoPago {
 
     let preference = {
       payer: {
-        email: "user@email.com"
+        email: user
       },
       items: [
         {
@@ -22,15 +22,21 @@ class MercadoPago {
           unit_price: Number(price)
         }
       ],
+      metadata: {
+        userName: user,
+        gallerieName : galleryName,
+        queen : queen,
+        price: price
+      },
       back_urls: {
-        failure: `http://localhost:3000/gallery/${id}`,
-        pending: `http://localhost:3000/gallery/${id}`,
-        success: `http://localhost:3000/`
+        // failure: `http://localhost:3000/gallery/${id}`,
+        // pending: `http://localhost:3000/gallery/${id}`,
+        success: `https://www.google.com`
       },
       auto_return: "approved",
-      external_reference: "user@lalala.com",
-      notification_url: `https://54b0-181-165-54-187.sa.ngrok.io/purchase/ipn`
+      // notification_url: ``
     };
+
     mercadopago.preferences.create(preference)
     .then(response => {
       res.json(response.body.init_point)

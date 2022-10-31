@@ -17,14 +17,15 @@ const getPurchases = async (req, res) => {
 
 const getuserPurchase = async (req, res) => {
   const { user } = req.params
+  console.log(user)
   const userPurchase = await Purchase.find({ userName: user })
   res.json(userPurchase)
 }
 
 // obterner por id 
 
-const getPurchaseById = async (req, res)=>{
-  const {id} = req.params
+const getPurchaseById = async (req, res) => {
+  const { id } = req.params
   const respuesta = await Purchase.findById(id)
   res.json(respuesta)
 }
@@ -37,17 +38,18 @@ const getQueensPurchase = async (req, res) => {
   const queenPurchase = await Purchase.find({ queen: queen })
   res.json(queenPurchase)
 }
+
 // obtener la galeria y imagenes si el usuario compro esa galeria devuelve todas las imagenes sino devuelve 4 
-const getGaleryPuchaseUser = async (req, res) => {
+const getGalleryPuchaseUser = async (req, res) => {
   const { user, gallerieName } = req.params
-  const userPurchase = await Purchase.find({ userName: user , Available : true})
-  if (!userPurchase || userPurchase === "undefined") {
-    const galleryPhotos = await Galeries.find({ gallerieName: gallerieName }, "photos",)
-    const galleryNoPurchase = galleryPhotos.slice(0, 4)
-    res.json(galleryNoPurchase)
+  const userPurchase = await Purchase.find({ userName: user, Available: true, gallerieName: gallerieName })
+  if ((userPurchase.length === 0) || (userPurchase == "undefined")) {
+    const galleryPhotos = await Galeries.find({ galleryName: gallerieName }, "photoBlur  photosShow")
+    res.json(galleryPhotos)
+  } else {
+    const galleryPhotos = await Galeries.find({ galleryName: gallerieName }, "photos")
+    res.json(galleryPhotos)
   }
-  const galleryPhotos = await Galeries.find({ gallerieName: gallerieName }, "photos")
-  res.json(galleryPhotos.photos)
 }
 
 // crear compra mercadoPago 
@@ -55,57 +57,27 @@ const getGaleryPuchaseUser = async (req, res) => {
 const createPaymentmercado = async (req, res) => {
 
   try {
-    // aca estaba probando que iba a recibir por las notificaciones de MP 
-    const { topic, id } = req.query;
-    const { usario, queen, galeryName, price } = req.params
-    console.log(`queryy ${req.query.topic} y ${id}`)
-
-    if (topic === "merchant_order") {
-      let merchantOrder = await mercadopago.merchant_orders.findById(id)
-      console.log(`matchh orderrrrr ${JSON.stringify(merchantOrder.body.status)}`)
-      if (JSON.stringify(merchantOrder.body.status) == "closed") {
-        const newPurchase = {
-          userName: usario,
-          galleryName: JSON.stringify(merchantOrder.body.items.title),
-          queen: JSON.stringify(merchantOrder.body.items.description),
-          price: JSON.stringify(merchantOrder.body.items.unit_price),
-        }
-        await Purchase.create(newPurchase)
-        res.status(200)
-      }
-
+    const {id} = req.body.data
+    let compra = await mercadopago.payment.findById(id)
+    const {status , status_detail} = compra.body
+    if(status === "approved" && status_detail === "accredited"){
+      const {user_name , queen , price , gallerie_name } = compra.body.metadata 
+      const { fee_details} = compra.body
+      const newPurchase = await new Purchase({
+        userName: user_name,
+        gallerieName : gallerie_name,
+        queen: queen,
+        price: price,
+        method : "mercado Pago",
+        Available: true,
+        commission : fee_details[0].amount
+      })
+      await newPurchase.save()
+      res.status(200).send("ok")
     }
 
-    // switch (topic) {
-    //   // case "payment":
-    //   //   const paymentId = query.id 
-    //   //   const payment = await mercadopago.payment.findById(paymentId)
-    //   //   console.log(payment)
-    //   //   merchantOrder = await mercadopago.merchant_orders.findById(payment.body.order.id)
-    //   //   console.log(`matchh orderrrrr ${merchantOrder}`)
-    //   //   break;
-    //   case "merchant_order":
-    //     const orderId = query.id;
-    //     merchantOrder = await mercadopago.merchant_orders.findById(orderId)
-    //     console.log(`matchh orderrrrr ${merchantOrder}`)
-    //     break
-    // }
-    // console.log(`ordeennnn ${merchantOrder}`)
-    // if (merchantOrder.body.status == "closed"){
-    //   const newPurchase = new Purchase({
-    //     userName : usario,
-    //     galleryName : galeryName,
-    //     queen : queen,
-    //     price : price,
-    //     comision : merchantOrder.body.status
-    // })
-    // await Purchase.create(newPurchase)
-
-    // res.status(200)
-    // } 
-
   } catch (error) {
-    console.log("no llego nada ")
+    console.log(error)
   }
 };
 
@@ -114,13 +86,14 @@ const createPaymentmercado = async (req, res) => {
 const createPaymentpaypal = async (req, res) => {
   try {
     const { userName, gallerieName, queen, price_USD } = req.body
-    
+
     const newPurchase = await new Purchase({
       userName: userName,
       gallerieName: gallerieName,
       queen: queen,
       price: price_USD,
-      Available : true
+      Available: true,
+      method : "PayPal",
     })
     await newPurchase.save()
     res.status(201).json(newPurchase)
@@ -156,7 +129,7 @@ module.exports = {
   getPurchases,
   createPaymentmercado,
   getQueensPurchase,
-  getGaleryPuchaseUser,
+  getGalleryPuchaseUser,
   createPaymentpaypal,
   paypalOrder,
   getuserPurchase,
