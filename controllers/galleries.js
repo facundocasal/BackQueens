@@ -3,28 +3,28 @@ const Galleries = require('../models/galleries')
 
 // obtener todas las galerias 
 const getGalleries = async (req, res) => {
-  const galleries = await Galleries.find({}, "coverPhotoGallery idQueen galleryName ")
+  const galleries = await Galleries.find({}, "coverPhotoGallery idQueen galleryName numberPhotos ")
   res.json(galleries)
 }
 
 // obtener galerias por id 
 const getGallerieById = async (req, res) => {
   const { id } = req.params
-  const galleries = await Galleries.findById(id , "coverPhotoGallery idQueen galleryName ")
+  const galleries = await Galleries.findById(id , "coverPhotoGallery idQueen galleryName numberPhotos ")
   res.json(galleries)
 }
 
 // galerias por queen  
 const getGallerieByQueen = async (req, res) => {
   const { queen } = req.params
-  const queenGalleries = await Galleries.find({ idQueen: queen } , "coverPhotoGallery idQueen galleryName ")
+  const queenGalleries = await Galleries.find({ idQueen: queen } , "coverPhotoGallery idQueen galleryName numberPhotos")
   res.json(queenGalleries)
 }
 
 // galerias por nombre Galeria  
 const getGallerieBygalleryName = async (req, res) => {
   const { queen, galleryName } = req.params
-  const gallery = await Galleries.find({ idQueen: queen, galleryName: galleryName } , "coverPhotoGallery idQueen galleryName ")
+  const gallery = await Galleries.find({ idQueen: queen, galleryName: galleryName } , "coverPhotoGallery idQueen galleryName numberPhotos ")
   res.json(gallery)
 }
 
@@ -44,7 +44,6 @@ const createGalleries = async (req, res) => {
       price_USD,
       coverPhotoGallery,
       photos } = req.body
-
     const newGallery = await new Galleries({
       idQueen,
       galleryName,
@@ -53,8 +52,10 @@ const createGalleries = async (req, res) => {
       photoBlur,
       price,
       price_USD,
-      photos
+      photos,
+      numberPhotos : photos.length
     })
+    
     await newGallery.save()
     res.json(`Gallery created successfully`)
   }

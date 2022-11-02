@@ -9,7 +9,7 @@ const galleries = new Schema({
   price_USD: Number,
   photosShow: [String],
   photos: [String],
-  
+  numberPhotos: Number,
 })
 
 module.exports = model('Galleries', galleries)

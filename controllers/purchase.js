@@ -17,7 +17,6 @@ const getPurchases = async (req, res) => {
 
 const getuserPurchase = async (req, res) => {
   const { user } = req.params
-  console.log(user)
   const userPurchase = await Purchase.find({ userName: user })
   res.json(userPurchase)
 }
@@ -53,12 +52,12 @@ const getQueensPurchase = async (req, res) => {
 const getGalleryPuchaseUser = async (req, res) => {
   try {
     const { user, galleryName } = req.params
-    const userPurchase = await Purchase.find({ userName: user, available: true, galleryName: galleryName })
-    if ((userPurchase.length === 0) || (userPurchase == "undefined")) {
-      const galleryPhotos = await Galeries.find({ galleryName: galleryName }, "photoBlur  photosShow")
+    const userPurchase = await Purchase.findOne({ userName: user, available: true, galleryName: galleryName })
+    if ((!userPurchase) || (userPurchase == "undefined")) {
+      const galleryPhotos = await Galeries.findOne({ galleryName: galleryName }, "photoBlur  photosShow numberPhotos galleryName idQueen")
       res.json(galleryPhotos)
     } else {
-      const galleryPhotos = await Galeries.find({ galleryName: galleryName }, "galleryName idQueen photos")
+      const galleryPhotos = await Galeries.findOne({ galleryName: galleryName }, "galleryName idQueen photos numberPhotos")
       res.json(galleryPhotos)
     }
   } catch (error) {

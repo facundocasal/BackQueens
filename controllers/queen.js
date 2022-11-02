@@ -24,7 +24,8 @@ const createQueen = async(req, res) =>{
 
 const getQueen = async (req, res) => {
   try {
-    const queens = await Queen.find({})
+    const {idQueen} = req.params
+    const queens = await Queen.find({name : idQueen })
     res.status(200).json(queens)
   }
   catch (error) {
