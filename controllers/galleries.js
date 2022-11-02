@@ -3,21 +3,21 @@ const Galleries = require('../models/galleries')
 
 // obtener todas las galerias 
 const getGalleries = async (req, res) => {
-  const galleries = await Galleries.find({}, "coverPhotoGallery idQueen galleryName numberPhotos ")
+  const galleries = await Galleries.find({}, "coverPhotoGallery idQueen galleryName numberPhotos price_USD price")
   res.json(galleries)
 }
 
 // obtener galerias por id 
 const getGallerieById = async (req, res) => {
   const { id } = req.params
-  const galleries = await Galleries.findById(id , "coverPhotoGallery idQueen galleryName numberPhotos ")
+  const galleries = await Galleries.findById(id , "coverPhotoGallery idQueen galleryName numberPhotos price_USD price")
   res.json(galleries)
 }
 
 // galerias por queen  
 const getGallerieByQueen = async (req, res) => {
   const { queen } = req.params
-  const queenGalleries = await Galleries.find({ idQueen: queen } , "coverPhotoGallery idQueen galleryName numberPhotos")
+  const queenGalleries = await Galleries.find({ idQueen: queen } , "coverPhotoGallery idQueen galleryName numberPhotos price_USD price")
   res.json(queenGalleries)
 }
 

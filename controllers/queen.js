@@ -1,12 +1,12 @@
 const { validationResult } = require('express-validator')
 const Queen = require('../models/queen')
 
-const createQueen = async(req, res) =>{
+const createQueen = async (req, res) => {
   const errors = validationResult(req)
   if (!errors.isEmpty()) {
-    return res.status(400).json({errors: 'Algo salió mal'})
+    return res.status(400).json({ errors: 'Algo salió mal' })
   }
-  try{
+  try {
     const { name, coverImage } = req.body
     const newQueen = new Queen({
       name,
@@ -14,8 +14,8 @@ const createQueen = async(req, res) =>{
     })
     await newQueen.save()
     res.json(`Queen created successfully`)
-  } 
-  catch(error){
+  }
+  catch (error) {
     return res.status(404).json({
       message: "Cannot create Queen"
     })
@@ -24,9 +24,14 @@ const createQueen = async(req, res) =>{
 
 const getQueen = async (req, res) => {
   try {
-    const {idQueen} = req.params
-    const queens = await Queen.find({name : idQueen })
-    res.status(200).json(queens)
+    const { idQueen } = req.params
+    if (idQueen) {
+      const queens = await Queen.find({ name: idQueen })
+      res.status(200).json(queens)
+    } else {
+      const queens = await Queen.find({})
+      res.status(200).json(queens)
+    }
   }
   catch (error) {
     return res.status(404).json({
@@ -55,7 +60,7 @@ const deleteQueen = async (req, res) => {
   const { id } = req.body
   try {
     const queen = await Queen.findOneAndDelete({ _id: id })
-    
+
     if (queen) {
       return res.status(200).json({
         mensaje: "Queen deleted succefully!",

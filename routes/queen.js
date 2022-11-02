@@ -5,7 +5,7 @@ const { createQueen, getQueen, deleteQueen, editQueen } = require('../controller
 const { validateQueen } = require('../helpers/queenValidate')
 
 route
-  .get('/:idQueen',
+  .get('/:idQueen?',
     getQueen
   )
 
