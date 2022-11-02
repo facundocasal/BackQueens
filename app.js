@@ -6,6 +6,7 @@ const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 const cors = require('cors');
 const CronJob = require('cron').CronJob;
+const Purchase = require("./models/purchase")
 
 const indexRouter = require('./routes/index');
 const userRouter = require('./routes/users');
@@ -38,8 +39,9 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-cron.start()
 
+
+cron.start()
 
 
 

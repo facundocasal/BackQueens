@@ -24,17 +24,14 @@ class MercadoPago {
       ],
       metadata: {
         userName: user,
-        gallerieName : galleryName,
+        galleryName : galleryName,
         queen : queen,
         price: price
       },
       back_urls: {
-        // failure: `http://localhost:3000/gallery/${id}`,
-        // pending: `http://localhost:3000/gallery/${id}`,
-        success: `https://www.google.com`
+        success: `${process.env.URL}`
       },
       auto_return: "approved",
-      // notification_url: ``
     };
 
     mercadopago.preferences.create(preference)

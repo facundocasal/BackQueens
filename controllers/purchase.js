@@ -25,30 +25,44 @@ const getuserPurchase = async (req, res) => {
 // obterner por id 
 
 const getPurchaseById = async (req, res) => {
-  const { id } = req.params
-  const respuesta = await Purchase.findById(id)
-  res.json(respuesta)
+  try {
+    const { id } = req.params
+    const respuesta = await Purchase.findById(id)
+    res.json(respuesta)
+  } catch (error) {
+    res.json({error : "compra no encontrada"})
+  }
 }
 
 
 // devuelve las compras asosiadas a una queen 
 
 const getQueensPurchase = async (req, res) => {
-  const { queen } = req.params
-  const queenPurchase = await Purchase.find({ queen: queen })
-  res.json(queenPurchase)
+  try {
+    const { queen } = req.params
+    const queenPurchase = await Purchase.find({ queen: queen })
+    queenPurchase.length === 0? res.json({msj: `no se encontraron compras`}) 
+     : res.json(queenPurchase)
+  } catch (error) {
+    res.json({error : "no se encontro ninguna compra por queen "})
+  }
+
 }
 
 // obtener la galeria y imagenes si el usuario compro esa galeria devuelve todas las imagenes sino devuelve 4 
 const getGalleryPuchaseUser = async (req, res) => {
-  const { user, gallerieName } = req.params
-  const userPurchase = await Purchase.find({ userName: user, Available: true, gallerieName: gallerieName })
-  if ((userPurchase.length === 0) || (userPurchase == "undefined")) {
-    const galleryPhotos = await Galeries.find({ galleryName: gallerieName }, "photoBlur  photosShow")
-    res.json(galleryPhotos)
-  } else {
-    const galleryPhotos = await Galeries.find({ galleryName: gallerieName }, "photos")
-    res.json(galleryPhotos)
+  try {
+    const { user, galleryName } = req.params
+    const userPurchase = await Purchase.find({ userName: user, available: true, galleryName: galleryName })
+    if ((userPurchase.length === 0) || (userPurchase == "undefined")) {
+      const galleryPhotos = await Galeries.find({ galleryName: galleryName }, "photoBlur  photosShow")
+      res.json(galleryPhotos)
+    } else {
+      const galleryPhotos = await Galeries.find({ galleryName: galleryName }, "galleryName idQueen photos")
+      res.json(galleryPhotos)
+    }
+  } catch (error) {
+    res.json({error : "galeria no encontrada"})
   }
 }
 
@@ -65,11 +79,11 @@ const createPaymentmercado = async (req, res) => {
       const { fee_details} = compra.body
       const newPurchase = await new Purchase({
         userName: user_name,
-        gallerieName : gallerie_name,
+        galleryName : gallerie_name,
         queen: queen,
         price: price,
         method : "mercado Pago",
-        Available: true,
+        available: true,
         commission : fee_details[0].amount
       })
       await newPurchase.save()
@@ -85,14 +99,14 @@ const createPaymentmercado = async (req, res) => {
 
 const createPaymentpaypal = async (req, res) => {
   try {
-    const { userName, gallerieName, queen, price_USD } = req.body
+    const { userName, galleryName, queen, price_USD } = req.body
 
     const newPurchase = await new Purchase({
       userName: userName,
-      gallerieName: gallerieName,
+      galleryName: galleryName,
       queen: queen,
       price: price_USD,
-      Available: true,
+      available: true,
       method : "PayPal",
     })
     await newPurchase.save()

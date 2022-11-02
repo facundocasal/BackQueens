@@ -7,7 +7,7 @@ const Purchase = require('../models/purchase')
 route
   .get('/', getPurchases)
   .get("/queen/:queen", getQueensPurchase ) 
-  .get("/user/:user/:gallerieName" , getGalleryPuchaseUser)
+  .get("/user/:user/:galleryName" , getGalleryPuchaseUser)
   .get("/user/:user", getuserPurchase)  
   .post("/paypal" , createPaymentpaypal)
   .post('/ipn', createPaymentmercado)

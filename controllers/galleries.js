@@ -3,7 +3,7 @@ const Galleries = require('../models/galleries')
 
 // obtener todas las galerias 
 const getGalleries = async (req, res) => {
-  const galleries = await Galleries.find()
+  const galleries = await Galleries.find({}, "coverPhotoGallery idQueen galleryName ")
   res.json(galleries)
 }
 

@@ -3,7 +3,7 @@ const { Schema, model } = require('mongoose');
 const purchase = new Schema({
     userName:  {
         type:String , required: true},
-    gallerieName: {
+    galleryName: {
         type:String , required: true},
     queen: {
         type:String , required: true},
@@ -11,7 +11,7 @@ const purchase = new Schema({
         type:Number , required: true} ,
     method: {
         type:String , required: true} ,
-    Available: {
+    available: {
         type: Boolean , required: true} ,
     commission:{
         type:Number
