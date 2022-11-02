@@ -10,23 +10,21 @@ const getGalleries = async (req, res) => {
 // obtener galerias por id 
 const getGallerieById = async (req, res) => {
   const { id } = req.params
-  const galleries = await Galleries.findById(id)
+  const galleries = await Galleries.findById(id , "coverPhotoGallery idQueen galleryName ")
   res.json(galleries)
 }
 
 // galerias por queen  
 const getGallerieByQueen = async (req, res) => {
   const { queen } = req.params
-  const queenGalleries = await Galleries.find({ idQueen: queen })
+  const queenGalleries = await Galleries.find({ idQueen: queen } , "coverPhotoGallery idQueen galleryName ")
   res.json(queenGalleries)
 }
 
 // galerias por nombre Galeria  
 const getGallerieBygalleryName = async (req, res) => {
   const { queen, galleryName } = req.params
-  console.log(`${queen} , ${galleryName}`)
-  const gallery = await Galleries.find({ idQueen: queen, galleryName: galleryName })
-  console.log(gallery)
+  const gallery = await Galleries.find({ idQueen: queen, galleryName: galleryName } , "coverPhotoGallery idQueen galleryName ")
   res.json(gallery)
 }
 
