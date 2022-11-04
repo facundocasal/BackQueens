@@ -13,6 +13,7 @@ const {
 } = require('../controllers/galleries')
 const Galleries = require('../models/galleries')
 const { validateGalleries } = require('../helpers/galleriesValidate')
+const { isAdmin} = require("../middleware/isAdmin");
 
 route
   // obtener todas las galerias 
@@ -35,11 +36,12 @@ route
     body('price').trim().escape().isNumeric().isLength({ min: 2, max: 6 }),
     body('price_USD').trim().escape().isNumeric().isLength({ min: 2, max: 6 }),
     body('[photos]'),
+    isAdmin,
     createGalleries)
 
-  .post("/updateGallerie", updateGallerie)
+  .post("/updateGallerie", isAdmin, updateGallerie)
   // borrar galeria por id
-  .delete("/delete/:id", jwtValidator, deleteGallerie)
+  .delete("/delete/:id", isAdmin, deleteGallerie)
 
 
 module.exports = route

@@ -6,8 +6,6 @@ const paypal = require('@paypal/checkout-server-sdk');
 // obtener todas las compras 
 
 const getPurchases = async (req, res) => {
-  // res.json({userId :req.userId, userEmail: req.userEmail})
-  // 
   try {
     const purchase = await Purchase.find()
     res.json(purchase)

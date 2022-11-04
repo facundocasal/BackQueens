@@ -1,10 +1,10 @@
 const Queen = require('../models/queen')
 
 const validateQueen = async(name) => {
-  const isName = await Queen.findOne({name})
+  const isName = await Queen.findOne({name : { $regex: name,  $options:'i' }})
 
   if (isName) {
-    throw new Error(`Algo salió mal`)
+    return res.status(401).json({email: {message: '* ya se encuentra registrada', status: 401}})
   }
 }
 

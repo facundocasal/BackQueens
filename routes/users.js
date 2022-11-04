@@ -4,9 +4,9 @@ const { body } = require('express-validator')
 const { createUser, deleteUser, getUsers } = require('../controllers/users');
 const { validateEmail, validateUserName } = require('../helpers/validation');
 const { jwtValidator } = require('../middleware/jwt');
-
+const { isAdmin} = require("../middleware/isAdmin");
 route
-  .get('/', jwtValidator, getUsers)
+  .get('/', isAdmin, getUsers)
 
 route
   .post('/',
@@ -21,6 +21,6 @@ route
     )
 
 route
-  .delete('/:id', jwtValidator, deleteUser)
+  .delete('/:id', isAdmin , deleteUser)
 
 module.exports = route

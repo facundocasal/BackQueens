@@ -11,6 +11,7 @@ const jwtValidator = async(req, res, next) => {
     const decode = jwt.verify(accessToken, token_secret)
     req.userId = decode.userId;
     req.userEmail = decode.email;
+    req.role = decode.role
     if (decode) {
       return next()
     }
@@ -19,7 +20,7 @@ const jwtValidator = async(req, res, next) => {
     })
   } catch (error) {
     res.status(401).json({
-      message: "Unauthorized"
+      message: "debes estar logueado para tener acceso"
     })
   }
 }

@@ -5,7 +5,7 @@ const MercadoPago = require("../controllers/mercadoPago");
 const mp = new MercadoPago()
 
 
-router.post("/createPayment", mp.createPay)
+router.post("/createPayment",jwtValidator,  mp.createPay)
 
 
 module.exports = router
