@@ -9,9 +9,31 @@ const getPurchases = async (req, res) => {
   try {
     const purchase = await Purchase.find()
     res.json(purchase)
-  } catch (error) {
+  }
+  catch (error) {
+    console.error(error)
   }
 };
+
+// obtener compras usarios o queen 
+
+const getUserOrQueenPurchase = async (req, res) => {
+  const { user } = req.params
+  try {
+    const respuesta = await Purchase.find({ userName: user })
+    console.log(!respuesta)
+    if(respuesta.length === 0) {
+      const respuesta1 = await Purchase.find({ queen: user })
+      res.json(respuesta1)
+    } else {
+      res.json(respuesta)
+    }
+  } catch (error) {
+    res.status(400).json({ error: "algo salio mal" })
+  }
+}
+
+
 
 const getuserPurchase = async (req, res) => {
   const { user } = req.params
@@ -27,7 +49,7 @@ const getPurchaseById = async (req, res) => {
     const respuesta = await Purchase.findById(id)
     res.json(respuesta)
   } catch (error) {
-    res.json({error : "compra no encontrada"})
+    res.json({ error: "compra no encontrada" })
   }
 }
 
@@ -38,10 +60,10 @@ const getQueensPurchase = async (req, res) => {
   try {
     const { queen } = req.params
     const queenPurchase = await Purchase.find({ queen: queen })
-    queenPurchase.length === 0? res.json({msj: `no se encontraron compras`}) 
-     : res.json(queenPurchase)
+    queenPurchase.length === 0 ? res.json({ msj: `no se encontraron compras` })
+      : res.json(queenPurchase)
   } catch (error) {
-    res.json({error : "no se encontro ninguna compra por queen "})
+    res.json({ error: "no se encontro ninguna compra por queen " })
   }
 
 }
@@ -59,7 +81,7 @@ const getGalleryPuchaseUser = async (req, res) => {
       res.json(galleryPhotos)
     }
   } catch (error) {
-    res.json({error : "galeria no encontrada"})
+    res.json({ error: "galeria no encontrada" })
   }
 }
 
@@ -68,20 +90,20 @@ const getGalleryPuchaseUser = async (req, res) => {
 const createPaymentmercado = async (req, res) => {
 
   try {
-    const {id} = req.body.data
+    const { id } = req.body.data
     let compra = await mercadopago.payment.findById(id)
-    const {status , status_detail} = compra.body
-    if(status === "approved" && status_detail === "accredited"){
-      const {user_name , queen , price , gallerie_name } = compra.body.metadata 
-      const { fee_details} = compra.body
+    const { status, status_detail } = compra.body
+    if (status === "approved" && status_detail === "accredited") {
+      const { user_name, queen, price, gallerie_name } = compra.body.metadata
+      const { fee_details } = compra.body
       const newPurchase = await new Purchase({
         userName: user_name,
-        galleryName : gallerie_name,
+        galleryName: gallerie_name,
         queen: queen,
         price: price,
-        method : "mercado Pago",
+        method: "mercado Pago",
         available: true,
-        commission : fee_details[0].amount
+        commission: fee_details[0].amount
       })
       await newPurchase.save()
       res.status(200).send("ok")
@@ -104,7 +126,7 @@ const createPaymentpaypal = async (req, res) => {
       queen: queen,
       price: price_USD,
       available: true,
-      method : "PayPal",
+      method: "PayPal",
     })
     await newPurchase.save()
     res.status(201).json(newPurchase)
@@ -144,5 +166,6 @@ module.exports = {
   createPaymentpaypal,
   paypalOrder,
   getuserPurchase,
-  getPurchaseById
+  getPurchaseById,
+  getUserOrQueenPurchase
 };

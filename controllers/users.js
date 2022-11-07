@@ -45,6 +45,18 @@ const getUsers = async (req, res) => {
   }
 }
 
+const getInfoUser = async (req , res) =>{
+  const {user} = req.params
+  try {
+    const userData = await User.findOne({email: "facu@gmail.com"})  
+  } 
+  catch (error) {
+    return res.status(400).json({
+      mensaje: "Cannot found any user"
+    })
+  }
+}
+
 const deleteUser = async (req, res) => {
   const { id } = req.params
   try {
@@ -67,4 +79,4 @@ const deleteUser = async (req, res) => {
   }
 }
 
-module.exports = { createUser, getUsers, deleteUser }
+module.exports = { createUser, getUsers, deleteUser , getInfoUser}

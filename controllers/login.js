@@ -15,8 +15,6 @@ const login = async (req, res) => {
   
   const userData = await userNameOrEmail(user)
 
-  console.log(`soyy user data ${userData}`)
-
   if (!userData) {
     res
       .status(400)
@@ -29,7 +27,9 @@ const login = async (req, res) => {
     const payload = {
       userId: userData._id,
       email: userData.email,
-      role: userData.role
+      role: userData.role,
+      lastName :  userData.lastName , 
+      userName : userData.userName
     };
     const accessToken = jwt.sign(payload, token_secret, { expiresIn: '2h' })
   

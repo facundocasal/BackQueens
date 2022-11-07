@@ -15,6 +15,8 @@ route
     body('name').trim().escape().isAlpha('es-ES', {ignore: ' '}).not().isEmpty().isLength({min: 3, max: 25}),
     body('name').custom(validateQueen),
     body('coverImage'),
+    body('password').not().isEmpty().isStrongPassword({minSymbols: 0}),
+    body('email').trim().escape().isEmail().not().isEmpty(),
     isAdmin,
     createQueen
   )

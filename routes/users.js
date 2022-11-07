@@ -1,13 +1,12 @@
 const { Router } = require('express')
 const route = Router()
 const { body } = require('express-validator')
-const { createUser, deleteUser, getUsers } = require('../controllers/users');
-const { validateEmail, validateUserName } = require('../helpers/validation');
+const { createUser, deleteUser, getUsers , getInfoUser } = require('../controllers/users');
+const { validateEmail, validateUserName  } = require('../helpers/validation');
 const { jwtValidator } = require('../middleware/jwt');
 const { isAdmin} = require("../middleware/isAdmin");
 route
   .get('/', isAdmin, getUsers)
-
 route
   .post('/',
     body('email').trim().escape().isEmail().not().isEmpty(),
