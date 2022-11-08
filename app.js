@@ -43,8 +43,6 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 cron.start()
 
-
-
 app.use('/', indexRouter);
 app.use('/login', loginRouter);
 app.use('/user', userRouter);

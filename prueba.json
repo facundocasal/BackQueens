@@ -1,6 +1,8 @@
-{
-    "userName" : "facuu@gmail.com",
-    "galleryName" : "galeria10",
-    "queen" : "caro10",
-    "price_USD" : 100
+{   
+    "name": "daniela",
+    "email" : "danielaQuenn@gmail.com",
+    "userName" : "daniela Queen",
+    "lastName" : "queen",
+    "password": "Dani12345",
+    "coverImage" : "http://www.diariolasamericas-storage.com/archivos/files/jean%202.jpg"
 }

@@ -28,7 +28,6 @@ const login = async (req, res) => {
       userId: userData._id,
       email: userData.email,
       role: userData.role,
-      lastName :  userData.lastName , 
       userName : userData.userName
     };
     const accessToken = jwt.sign(payload, token_secret, { expiresIn: '2h' })
@@ -36,7 +35,7 @@ const login = async (req, res) => {
     if (match) {
       res.status(200).json({
         mensaje: "Autentificación exitosa",
-        name: userData.name,
+        name: userData.userName,
         accessToken: accessToken,
       })
     } else {

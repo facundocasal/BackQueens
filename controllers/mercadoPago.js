@@ -23,7 +23,7 @@ class MercadoPago {
       ],
       metadata: {
         userId : req.userId,
-        userName: req.userEmail,
+        userName: req.userName,
         galleryName : galleryName,
         queen : queen,
         price: price

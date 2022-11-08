@@ -46,9 +46,10 @@ const getUsers = async (req, res) => {
 }
 
 const getInfoUser = async (req , res) =>{
-  const {user} = req.params
+  const {userName} = req.params
   try {
-    const userData = await User.findOne({email: "facu@gmail.com"})  
+    const userData = await User.findOne({userName}, "email role lastName name")  
+    res.json(userData)
   } 
   catch (error) {
     return res.status(400).json({

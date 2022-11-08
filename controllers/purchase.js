@@ -21,7 +21,6 @@ const getUserOrQueenPurchase = async (req, res) => {
   const { user } = req.params
   try {
     const respuesta = await Purchase.find({ userName: user })
-    console.log(!respuesta)
     if(respuesta.length === 0) {
       const respuesta1 = await Purchase.find({ queen: user })
       res.json(respuesta1)
@@ -93,22 +92,29 @@ const createPaymentmercado = async (req, res) => {
     const { id } = req.body.data
     let compra = await mercadopago.payment.findById(id)
     const { status, status_detail } = compra.body
+    console.log(status)
+    console.log(status_detail)
     if (status === "approved" && status_detail === "accredited") {
-      const { user_name, queen, price, gallerie_name } = compra.body.metadata
+      console.log(compra.body.metadata)
+      const { user_name, queen, price, gallery_name } = compra.body.metadata
       const { fee_details } = compra.body
-      const newPurchase = await new Purchase({
+      const newPurchase = {
         userName: user_name,
-        galleryName: gallerie_name,
+        galleryName: gallery_name,
         queen: queen,
         price: price,
         method: "mercado Pago",
         available: true,
         commission: fee_details[0].amount
+      }
+      Purchase.create(newPurchase)
+      .then(()=>res.status(200).send("ok"))
+      .catch((error) => {
+        console.log(error);
+        res.status(500).send('Error: ' + error);
       })
-      await newPurchase.save()
-      res.status(200).send("ok")
     }
-
+    res.status(200).send("ok")
   } catch (error) {
     console.log(error)
   }
