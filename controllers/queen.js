@@ -1,6 +1,8 @@
-const { validationResult } = require('express-validator')
-const Queen = require('../models/queen')
-const bcrypt = require('bcrypt')
+const { validationResult } = require('express-validator');
+const Queen = require('../models/queen');
+const User = require('../models/users');
+const bcrypt = require('bcrypt');
+
 
 const createQueen = async (req, res) => {
   const errors = validationResult(req)
@@ -8,17 +10,23 @@ const createQueen = async (req, res) => {
     return res.status(400).json({ errors: 'Algo salió mal' })
   }
   try {
-    const { name, coverImage , password , email } = req.body
-    const newQueen = new Queen({
+    const { name, userName , lastName , coverImage , password , email } = req.body
+
+    const newQueen = await new Queen({
       name,
       coverImage,
-      password,
+    })
+    const newUserQueen = await new User({
       email,
+      userName,
+      name,
+      lastName,
+      password,
       role : "queen",
     })
     const salt = bcrypt.genSaltSync()
-    newQueen.password = bcrypt.hashSync(password, salt)
-
+    newUserQueen.password = bcrypt.hashSync(password, salt)
+    await newUserQueen.save()
     await newQueen.save()
     res.status(200).json(`Queen created successfully`)
   }
