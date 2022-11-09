@@ -27,7 +27,6 @@ route
   // crear galeria
   .post("/",
     body('idQueen'),
-    // body('galleryName').trim().escape().isAlpha('es-ES', {ignore: ''}).not().isEmpty().isLength({min: 3, max: 30}),
     body('galleryName').trim().escape().not().isEmpty().isLength({ min: 3, max: 30 }),
     body('galleryName').custom(validateGalleries),
     body('coverPhotoGallery'),
@@ -37,7 +36,8 @@ route
     body('price_USD').trim().escape().isNumeric().isLength({ min: 2, max: 6 }),
     body('[photos]'),
     isAdmin,
-    createGalleries)
+    createGalleries
+    )
 
   .post("/updateGallerie", isAdmin, updateGallerie)
   // borrar galeria por id
