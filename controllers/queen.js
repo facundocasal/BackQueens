@@ -6,7 +6,6 @@ const bcrypt = require('bcrypt');
 
 const createQueen = async (req, res) => {
   const errors = validationResult(req)
-  console.log(errors)
   if (!errors.isEmpty()) {
     return res.status(400).json({ errors: 'Algo salió mal' })
   }
@@ -27,8 +26,6 @@ const createQueen = async (req, res) => {
     })
     const salt = bcrypt.genSaltSync()
     newUserQueen.password = bcrypt.hashSync(password, salt)
-    console.log(newQueen)
-    console.log(newUserQueen)
     await newUserQueen.save()
     await newQueen.save()
     res.status(200).json(`Queen created successfully`)
