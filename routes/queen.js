@@ -17,12 +17,12 @@ route
     body('name').custom(validateQueen),
     body('lastName').trim().escape().isAlpha('es-ES', {ignore: ' '}).not().isEmpty().isLength({min: 3, max: 25}),
     body('coverImage'),
-    // body('userName').trim().escape().isAlphanumeric().isLength({min: 4, max: 15}).not().isEmpty(),
     body('password').not().isEmpty().isStrongPassword({minSymbols: 0}),
     body('email').trim().escape().isEmail().not().isEmpty(),
     validateEmail,
     validateUserName,
     validateName,
+    isAdmin,
     createQueen
   )
 
