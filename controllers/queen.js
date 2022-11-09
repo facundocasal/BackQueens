@@ -11,7 +11,7 @@ const createQueen = async (req, res) => {
     return res.status(400).json({ errors: 'Algo salió mal' })
   }
   try {
-    const { name, userName , lastName , coverImage , password , email } = req.body
+    const { name , lastName , coverImage , password , email } = req.body
 
     const newQueen = await new Queen({
       name,
@@ -19,7 +19,7 @@ const createQueen = async (req, res) => {
     })
     const newUserQueen = await new User({
       email,
-      userName,
+      userName : name,
       name,
       lastName,
       password,

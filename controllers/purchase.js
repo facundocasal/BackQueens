@@ -20,12 +20,12 @@ const getPurchases = async (req, res) => {
 const getUserOrQueenPurchase = async (req, res) => {
   const { user } = req.params
   try {
-    const respuesta = await Purchase.find({ userName: user })
-    if(respuesta.length === 0) {
-      const respuesta1 = await Purchase.find({ queen: user })
-      res.json(respuesta1)
+    const result = await Purchase.find({ userName: user })
+    if(result.length === 0) {
+      const result = await Purchase.find({ queen: user })
+      res.json(result)
     } else {
-      res.json(respuesta)
+      res.json(result)
     }
   } catch (error) {
     res.status(400).json({ error: "algo salio mal" })
@@ -34,11 +34,11 @@ const getUserOrQueenPurchase = async (req, res) => {
 
 
 
-const getuserPurchase = async (req, res) => {
-  const { user } = req.params
-  const userPurchase = await Purchase.find({ userName: user })
-  res.json(userPurchase)
-}
+// const getuserPurchase = async (req, res) => {
+//   const { user } = req.params
+//   const userPurchase = await Purchase.find({ userName: user })
+//   res.json(userPurchase)
+// }
 
 // obterner por id 
 
@@ -55,17 +55,17 @@ const getPurchaseById = async (req, res) => {
 
 // devuelve las compras asosiadas a una queen 
 
-const getQueensPurchase = async (req, res) => {
-  try {
-    const { queen } = req.params
-    const queenPurchase = await Purchase.find({ queen: queen })
-    queenPurchase.length === 0 ? res.json({ msj: `no se encontraron compras` })
-      : res.json(queenPurchase)
-  } catch (error) {
-    res.json({ error: "no se encontro ninguna compra por queen " })
-  }
+// const getQueensPurchase = async (req, res) => {
+//   try {
+//     const { queen } = req.params
+//     const queenPurchase = await Purchase.find({ queen: queen })
+//     queenPurchase.length === 0 ? res.json({ msj: `no se encontraron compras` })
+//       : res.json(queenPurchase)
+//   } catch (error) {
+//     res.json({ error: "no se encontro ninguna compra por queen " })
+//   }
 
-}
+// }
 
 // obtener la galeria y imagenes si el usuario compro esa galeria devuelve todas las imagenes sino devuelve 4 
 const getGalleryPuchaseUser = async (req, res) => {
@@ -167,11 +167,9 @@ const paypalOrder = async (req, res) => {
 module.exports = {
   getPurchases,
   createPaymentmercado,
-  getQueensPurchase,
   getGalleryPuchaseUser,
   createPaymentpaypal,
   paypalOrder,
-  getuserPurchase,
   getPurchaseById,
   getUserOrQueenPurchase
 };

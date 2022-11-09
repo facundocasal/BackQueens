@@ -22,4 +22,17 @@ const validateUserName = async(req, res, next) =>{
   next()
 }
 
-module.exports = { validateEmail, validateUserName }
+const validateName = async(req, res, next) =>{
+  const { name } = req.body
+  console.log("llegue")
+  const isUserName = await User.findOne({ userName : name })
+
+  if(isUserName) {
+    return res.status(401).json({userName: {message: '* Este nombre de usuario 123123 ya existe', status: 401}})
+  }
+
+  next()
+}
+
+
+module.exports = { validateEmail, validateUserName , validateName }

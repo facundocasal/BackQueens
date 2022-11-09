@@ -8,11 +8,11 @@ const jwtValidator = async(req, res, next) => {
   const accessToken = req.headers['accesstoken']
 
   try {
-    const decode = await jwt.verify(accessToken, token_secret)
+    const decode = jwt.verify(accessToken, token_secret)
     req.userId = decode.userId;
     req.userEmail = decode.email;
     req.userName = decode.userName;
-    req.role = decode.role
+    req.role = decode.role;
     if (decode) {
       return next()
     }
