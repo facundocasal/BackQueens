@@ -15,7 +15,7 @@ route
   .post('/',
     body('name').trim().escape().isAlpha('es-ES', {ignore: ' '}).not().isEmpty().isLength({min: 3, max: 25}),
     body('name').custom(validateQueen),
-    body('lastName').trim().escape().isAlpha('es-ES', {ignore: ' '}).not().isLength({min: 0, max: 25}),
+    body('lastName').trim().escape().isAlpha('es-ES', {ignore: ' '}),
     body('coverImage'),
     body('password').not().isEmpty().isStrongPassword({minSymbols: 0}),
     body('email').trim().escape().isEmail().not().isEmpty(),
