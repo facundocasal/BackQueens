@@ -10,11 +10,12 @@ const createQueen = async (req, res) => {
     return res.status(400).json({ errors: 'Algo salió mal' })
   }
   try {
-    const { name , lastName , coverImage , password , email } = req.body
+    const { name , lastName , coverImage , password , email , photoCarrusel } = req.body
 
     const newQueen = await new Queen({
       name,
       coverImage,
+      photoCarrusel
     })
     const newUserQueen = await new User({
       email,

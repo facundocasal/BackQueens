@@ -6,7 +6,6 @@ const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 const cors = require('cors');
 const CronJob = require('cron').CronJob;
-const Galleries = require("./models/galleries")
 
 const indexRouter = require('./routes/index');
 const userRouter = require('./routes/users');

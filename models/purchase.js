@@ -20,5 +20,6 @@ const purchase = new Schema({
     {
         timestamps: true,
         versionKey: false,
-    })
+    }
+    )
 module.exports = model('purchase', purchase);
