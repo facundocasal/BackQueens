@@ -1,147 +1,134 @@
-const Purchase = require('../models/purchase')
+const Purchase = require("../models/purchase");
 const Galeries = require("../models/galleries");
-const mercadopago = require('mercadopago');
-const paypal = require('@paypal/checkout-server-sdk');
+const mercadopago = require("mercadopago");
+const paypal = require("@paypal/checkout-server-sdk");
+const User = require("../models/users");
 
-// obtener todas las compras 
+// obtener todas las compras
 
 const getPurchases = async (req, res) => {
   try {
-    const purchase = await Purchase.find()
-    res.json(purchase)
-  }
-  catch (error) {
-    console.error(error)
+    const purchase = await Purchase.find();
+    res.json(purchase);
+  } catch (error) {
+    console.error(error);
   }
 };
 
-// obtener compras usarios o queen 
+// obtener compras usarios o queen
 
 const getUserOrQueenPurchase = async (req, res) => {
-  const { user } = req.params
+  const { userId } = req.params;
+  console.log(userId);
   try {
-    const result = await Purchase.find({ userName: user })
-    if(result.length === 0) {
-      const result = await Purchase.find({ queen: user })
-      res.json(result)
+    const result = await Purchase.find({ userId: userId });
+    if (result.length === 0) {
+      const result = await Purchase.find({ queenId: userId });
+      res.json(result);
     } else {
-      res.json(result)
+      res.json(result);
     }
   } catch (error) {
-    res.status(400).json({ error: "algo salio mal" })
+    res.status(400).json({ error: "algo salio mal" });
   }
-}
+};
 
-
-
-// const getuserPurchase = async (req, res) => {
-//   const { user } = req.params
-//   const userPurchase = await Purchase.find({ userName: user })
-//   res.json(userPurchase)
-// }
-
-// obterner por id 
+// obterner por id
 
 const getPurchaseById = async (req, res) => {
+  const { id } = req.params;
   try {
-    const { id } = req.params
-    const respuesta = await Purchase.findById(id)
-    res.json(respuesta)
+    const { id } = req.params;
+    const respuesta = await Purchase.findById(id);
+    res.json(respuesta);
   } catch (error) {
-    res.json({ error: "compra no encontrada" })
+    res.json({ error: "compra no encontrada" });
   }
-}
+};
 
-
-// devuelve las compras asosiadas a una queen 
-
-// const getQueensPurchase = async (req, res) => {
-//   try {
-//     const { queen } = req.params
-//     const queenPurchase = await Purchase.find({ queen: queen })
-//     queenPurchase.length === 0 ? res.json({ msj: `no se encontraron compras` })
-//       : res.json(queenPurchase)
-//   } catch (error) {
-//     res.json({ error: "no se encontro ninguna compra por queen " })
-//   }
-
-// }
-
-// obtener la galeria y imagenes si el usuario compro esa galeria devuelve todas las imagenes sino devuelve 4 
+// obtener la galeria y imagenes si el usuario compro esa galeria devuelve todas las imagenes sino devuelve 4
 const getGalleryPuchaseUser = async (req, res) => {
   try {
-    const { user, galleryName } = req.params
-    const userPurchase = await Purchase.findOne({ userName: user, available: true, galleryName: galleryName })
-    if ((!userPurchase) || (userPurchase == "undefined")) {
-      const galleryPhotos = await Galeries.findOne({ galleryName: galleryName }, "photoBlur  photosShow numberPhotos galleryName idQueen")
-      res.json(galleryPhotos)
+    const { userId, galleryName } = req.params;
+    const userPurchase = await Purchase.findOne({
+      userId: userId,
+      available: true,
+      galleryName: galleryName,
+    });
+    if (!userPurchase || userId == "undefined") {
+      const galleryPhotos = await Galeries.findOne(
+        { galleryName: galleryName },
+        "photoBlur  photosShow numberPhotos galleryName idQueen"
+      );
+      res.json(galleryPhotos);
     } else {
-      const galleryPhotos = await Galeries.findOne({ galleryName: galleryName }, "galleryName idQueen photos numberPhotos")
-      res.json(galleryPhotos)
+      const galleryPhotos = await Galeries.findOne(
+        { galleryName: galleryName },
+        "galleryName idQueen photos numberPhotos"
+      );
+      res.json(galleryPhotos);
     }
   } catch (error) {
-    res.json({ error: "galeria no encontrada" })
+    res.json({ error: "galeria no encontrada" });
   }
-}
+};
 
-// crear compra mercadoPago 
+// crear compra mercadoPago
 
 const createPaymentmercado = async (req, res) => {
-
   try {
-    const { id } = req.body.data
-    let compra = await mercadopago.payment.findById(id)
-    const { status, status_detail } = compra.body
-    console.log(status)
-    console.log(status_detail)
+    const { id } = req.body.data;
+    let compra = await mercadopago.payment.findById(id);
+    const { status, status_detail } = compra.body;
     if (status === "approved" && status_detail === "accredited") {
-      console.log(compra.body.metadata)
-      const { user_name, queen, price, gallery_name } = compra.body.metadata
-      const { fee_details } = compra.body
+      const { user_name, user_id, queen, price, gallery_name } =
+        compra.body.metadata;
+      const queenId = await User.findOne({ userName: queen }, "id");
+      const { fee_details } = compra.body;
       const newPurchase = {
+        queenId: queenId.id,
+        userId: user_id,
         userName: user_name,
         galleryName: gallery_name,
         queen: queen,
         price: price,
         method: "mercado Pago",
         available: true,
-        commission: fee_details[0].amount
-      }
-      Purchase.create(newPurchase)
-      .then(()=>res.status(200).send("ok"))
-      .catch((error) => {
-        console.log(error);
-        res.status(500).send('Error: ' + error);
-      })
+        commission: fee_details[0].amount,
+      };
+      await Purchase.create(newPurchase);
+      console.log("cree");
+      res.status(200).send("ok");
     }
-    res.status(200).send("ok")
   } catch (error) {
-    console.log(error)
+    console.log(error);
   }
 };
 
-// crear compra mercadopaypal
+// crear compra paypal
 
 const createPaymentpaypal = async (req, res) => {
-  try {
-    const { userName, galleryName, queen, price_USD } = req.body
+  const { userName, userId, galleryName, idQueen, price_USD } = req.body;
 
+  const queenId = await User.findOne({ userName: idQueen }, "id");
+
+  try {
     const newPurchase = await new Purchase({
-      userName: userName,
+      queenId: queenId.id,
+      userId: req.userId,
+      userName: req.userName,
       galleryName: galleryName,
-      queen: queen,
+      queen: idQueen,
       price: price_USD,
       available: true,
       method: "PayPal",
-    })
-    await newPurchase.save()
-    res.status(201).json(newPurchase)
+    });
+    await newPurchase.save();
+    res.status(201).json(newPurchase);
+  } catch (err) {
+    console.log(err);
   }
-  catch (err) {
-    console.log(err)
-  }
-}
-
+};
 
 const paypalOrder = async (req, res) => {
   const soli = new paypal.orders.OrdersCreateRequest();
@@ -155,13 +142,13 @@ const paypalOrder = async (req, res) => {
         amount: {
           currency_code: "USD",
           value: `${amounts}`,
-        }
-      }
-    ]
-  })
+        },
+      },
+    ],
+  });
   const respo = await client.execute(soli);
   console.log(`Order: ${JSON.stringify(respo.result)}`);
-  return res.json({ id: respo.result.id })
+  return res.json({ id: respo.result.id });
 };
 
 module.exports = {
@@ -171,5 +158,5 @@ module.exports = {
   createPaymentpaypal,
   paypalOrder,
   getPurchaseById,
-  getUserOrQueenPurchase
+  getUserOrQueenPurchase,
 };

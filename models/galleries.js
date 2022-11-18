@@ -1,4 +1,4 @@
-const { Schema, model } = require('mongoose');
+const { Schema, model } = require("mongoose");
 
 const galleries = new Schema({
   idQueen: String,
@@ -10,6 +10,6 @@ const galleries = new Schema({
   photosShow: [String],
   photos: [String],
   numberPhotos: Number,
-})
+});
 
-module.exports = model('Galleries', galleries)
+module.exports = model("Galleries", galleries);

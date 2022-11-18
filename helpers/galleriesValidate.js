@@ -1,11 +1,13 @@
-const Galleries = require('../models/galleries')
+const Galleries = require("../models/galleries");
 
-const validateGalleries = async(galleryName) => {
-  const isGallerie = await Galleries.findOne({galleryName : { $regex: galleryName,  $options:'i' }})
+const validateGalleries = async (galleryName) => {
+  const isGallerie = await Galleries.findOne({
+    galleryName: { $regex: galleryName, $options: "i" },
+  });
 
   if (isGallerie) {
-    throw new Error(`Nombre de galeria existente`)
+    throw new Error(`Nombre de galeria existente`);
   }
-}
+};
 
-module.exports = { validateGalleries }
+module.exports = { validateGalleries };

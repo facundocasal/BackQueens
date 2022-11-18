@@ -1,9 +1,9 @@
-const { Schema, model } = require('mongoose')
+const { Schema, model } = require("mongoose");
 
 const queen = new Schema({
   name: String,
   coverImage: String,
-  photoCarrusel : String,
-})
+  photoCarrusel: String,
+});
 
-module.exports = model('Queen', queen)
+module.exports = model("Queen", queen);
