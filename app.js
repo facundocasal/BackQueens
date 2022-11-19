@@ -7,13 +7,13 @@ const logger = require("morgan");
 const cors = require("cors");
 const CronJob = require("cron").CronJob;
 
-const ngrok = require('ngrok');
+// const ngrok = require('ngrok');
 
-(async function() {
-  await ngrok.authtoken("2GMqDKjmfzfd0qMON6vBIcQeCMb_3tsVkiEKMK1E5dpXAXfrt");
-  const url = await ngrok.connect(8000);
-  console.log(url)
-})();
+// (async function() {
+//   await ngrok.authtoken("2GMqDKjmfzfd0qMON6vBIcQeCMb_3tsVkiEKMK1E5dpXAXfrt");
+//   const url = await ngrok.connect(8000);
+//   console.log(url)
+// })();
 
 const indexRouter = require("./routes/index");
 const userRouter = require("./routes/users");
@@ -24,6 +24,7 @@ const carouselRouter = require("./routes/carousel");
 const purchaseRouter = require("./routes/purchase");
 const routesMercadoPago = require("./routes/mercadoPago");
 const { ubdateSuscriptcion } = require("./util/cronUpdate");
+
 const app = express();
 const cron = new CronJob(process.env.CRON_TIME, ubdateSuscriptcion);
 

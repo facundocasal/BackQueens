@@ -108,9 +108,9 @@ const createPaymentmercado = async (req, res) => {
 // crear compra paypal
 
 const createPaymentpaypal = async (req, res) => {
-  const { userName, userId, galleryName, idQueen, price_USD } = req.body;
+  const { userName, userId, galleryName, queen, price_USD } = req.body;
 
-  const queenId = await User.findOne({ userName: idQueen }, "id");
+  const queenId = await User.findOne({ userName: queen }, "id");
 
   try {
     const newPurchase = await new Purchase({
@@ -118,7 +118,7 @@ const createPaymentpaypal = async (req, res) => {
       userId: req.userId,
       userName: req.userName,
       galleryName: galleryName,
-      queen: idQueen,
+      queen: queen,
       price: price_USD,
       available: true,
       method: "PayPal",

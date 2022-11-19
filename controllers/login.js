@@ -28,7 +28,7 @@ const login = async (req, res) => {
       role: userData.role,
       userName: userData.userName,
     };
-    const accessToken = jwt.sign(payload, token_secret, { expiresIn: "2h" });
+    const accessToken = jwt.sign(payload, token_secret, { expiresIn: "24h" });
 
     if (match) {
       res.status(200).json({

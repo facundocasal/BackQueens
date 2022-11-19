@@ -10,6 +10,7 @@ const {
   getGallerieBygalleryName,
   deleteGallerie,
   updateGallerie,
+  getAdminGalleries,
 } = require("../controllers/galleries");
 const Galleries = require("../models/galleries");
 const { validateGalleries } = require("../helpers/galleriesValidate");
@@ -18,6 +19,8 @@ const { isAdmin } = require("../middleware/isAdmin");
 route
   // obtener todas las galerias
   .get("/", getGalleries)
+  // obtener las galerias para el admin
+  .get("/admin", jwtValidator , isAdmin ,getAdminGalleries )
   // galleries by ID
   .get("/id/:id", getGallerieById)
   // galleries by queen

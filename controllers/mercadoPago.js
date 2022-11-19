@@ -8,7 +8,7 @@ mercadopago.configure({
 class MercadoPago {
   createPay = (req, res) => {
     
-    const { galleryName, queen, price, id } = req.body;
+    const { galleryName, queen, price} = req.body;
     let preference = {
       payer: {
         email: req.userEmail,
@@ -30,7 +30,7 @@ class MercadoPago {
         price: price,
       },
       back_urls: {
-        success: `${process.env.URL}/galleries`,
+        success: `${process.env.URL}/galleries/${galleryName}`,
       },
       auto_return: "approved",
     };

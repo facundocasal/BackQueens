@@ -10,6 +10,14 @@ const getGalleries = async (req, res) => {
   res.json(galleries);
 };
 
+// obtener las galerias para admin 
+
+const getAdminGalleries = async (req , res ) =>{
+  const galleries = await Galleries.find({})
+  res.status(200).json(galleries)
+}
+
+
 // obtener galerias por id
 const getGallerieById = async (req, res) => {
   const { id } = req.params;
@@ -94,6 +102,7 @@ const deleteGallerie = async (req, res) => {
 module.exports = {
   createGalleries,
   getGallerieById,
+  getAdminGalleries,
   getGallerieByQueen,
   getGalleries,
   getGallerieBygalleryName,
