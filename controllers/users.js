@@ -1,7 +1,7 @@
 const { validationResult } = require("express-validator");
 const User = require("../models/users");
 const bcrypt = require("bcrypt");
-const Purchase = require("../models/purchase");
+const { userNameOrEmail } = require("../helpers/loginValidate");
 
 const createUser = async (req, res) => {
   const errors = validationResult(req);
@@ -81,4 +81,74 @@ const deleteUser = async (req, res) => {
   }
 };
 
-module.exports = { createUser, getUsers, deleteUser, getInfoUser };
+const editUser = async (req, res) => {
+  const errors = validationResult(req.body);
+  if (!errors.isEmpty()) {
+    return res.status(400).json({ errors: "Algo salió mal" });
+  }
+  const { email, userName, name, lastName, passOld, password } = req.body;
+  const { id } = req.params;
+  const user = await User.findById(id);
+  // const user = await User.findById(req.userId)
+  // const user = await User.findById(id)
+  // console.log(user)
+  try {
+    if (!passOld) {
+      res.status(401).json({ message: "debes ingresar tu contraseña " });
+    }
+    const match = await bcrypt.compare(passOld, user.password);
+    if (match) {
+      const userMatchName = await User.findOne({ userName });
+      if (userMatchName) {
+        if (id != userMatchName._id) {
+          res
+            .status(401)
+            .json({ message: "nombre de usuario ya se encuentra registrado" });
+        }
+      }
+      const userEmailMatch = await User.findOne({ email: email });
+      if (userEmailMatch) {
+        if (id != userEmailMatch._id) {
+          res
+          .status(401)
+          .json({ message: "email ya se encuentra registrado" });
+        }
+      }
+      if (!password) {
+        await User.findByIdAndUpdate(
+          { _id: id },
+          {
+            email: email,
+            userName: userName,
+            name: name,
+            lastName: lastName,
+          },
+          { new: true }
+        );
+        res.status(200).json({ message: "Usuario Modificado" });
+      } else {
+        const salt = bcrypt.genSaltSync();
+        passwordEncript = bcrypt.hashSync(password, salt);
+        // await User.findByIdAndUpdate({_id : req.userId}, {
+        await User.findByIdAndUpdate(
+          { _id: id },
+          {
+            email: email,
+            userName: userName,
+            name: name,
+            lastName: lastName,
+            password: passwordEncript,
+          },
+          { new: true }
+        );
+        res.status(200).json({ message: "Usuario Modificado" });
+      }
+    } else {
+      res.status(401).json({ message: "credenciales incorrectas" });
+    }
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+module.exports = { createUser, getUsers, deleteUser, getInfoUser, editUser };

@@ -19,7 +19,6 @@ const getPurchases = async (req, res) => {
 
 const getUserOrQueenPurchase = async (req, res) => {
   const { userId } = req.params;
-  console.log(userId);
   try {
     const result = await Purchase.find({ userId: userId });
     if (result.length === 0) {
