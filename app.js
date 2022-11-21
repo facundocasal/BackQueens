@@ -23,6 +23,7 @@ const galleriesRouter = require("./routes/galleries");
 const carouselRouter = require("./routes/carousel");
 const purchaseRouter = require("./routes/purchase");
 const routesMercadoPago = require("./routes/mercadoPago");
+const jwtRouter = require('./routes/jwtRouter');
 const { ubdateSuscriptcion } = require("./util/cronUpdate");
 
 const app = express();
@@ -59,6 +60,7 @@ app.use("/galleries", galleriesRouter);
 app.use("/carousel", carouselRouter);
 app.use("/purchase", purchaseRouter);
 app.use("/mercadopago", routesMercadoPago);
+app.use("/jwt", jwtRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

@@ -30,7 +30,7 @@ class MercadoPago {
         price: price,
       },
       back_urls: {
-        success: `${process.env.URL}/galleries/${galleryName}`,
+        success: `${process.env.URL}/gallery/${galleryName}`,
       },
       auto_return: "approved",
     };

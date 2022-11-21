@@ -15,8 +15,8 @@ const jwtValidator = async (req, res, next) => {
     if (decode) {
       return next();
     }
-    return res.status(404).json({
-      message: "User Not found!",
+    return res.status(401).json({
+      message: "debes estar logueado para tener acceso",
     });
   } catch (error) {
     res.status(401).json({
