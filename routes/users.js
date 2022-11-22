@@ -45,7 +45,7 @@ route.post(
   createUser
 )
 .post(
-  "/changepassword/:id",
+  "/changepassword",
   body("email").trim().escape().isEmail().not().isEmpty(),
   body("userName")
     .trim()
@@ -68,6 +68,7 @@ route.post(
     .not()
     .isLength({ min: 0, max: 25 }),
   body("password").not().isEmpty().isStrongPassword({ minSymbols: 0 }),
+  jwtValidator,
   editUser
 );
 route.delete("/:id", isAdmin, deleteUser);
