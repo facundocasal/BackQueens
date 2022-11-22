@@ -42,7 +42,7 @@ route
     body("[photosShow]"),
     body("photoBlur"),
     body("price").trim().escape().isNumeric().isLength({ min: 2, max: 6 }),
-    body("price_USD").trim().escape().isNumeric().isLength({ min: 2, max: 6 }),
+    body("price_USD").trim().escape().isNumeric().isLength({ min: 1, max: 6 }),
     body("[photos]"),
     isAdmin,
     createGalleries

@@ -47,11 +47,11 @@ const getUsers = async (req, res) => {
 };
 
 const getInfoUser = async (req, res) => {
-  const { userName } = req.params;
+  const { userId } = req.params;
   try {
     const userData = await User.findOne(
-      { userName },
-      "email role lastName name id"
+      { userId },
+      "email role lastName name id userName"
     );
     res.json(userData);
   } catch (error) {

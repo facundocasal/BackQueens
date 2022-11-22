@@ -14,7 +14,7 @@ const { isAdmin } = require("../middleware/isAdmin");
 
 route
 .get("/", isAdmin, getUsers)
-.get("/:userName", jwtValidator, getInfoUser)
+.get("/:userId", jwtValidator, getInfoUser)
 .post(
   "/",
   body("email").trim().escape().isEmail().not().isEmpty(),
