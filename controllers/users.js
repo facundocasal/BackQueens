@@ -4,14 +4,16 @@ const bcrypt = require("bcrypt");
 const { userNameOrEmail } = require("../helpers/loginValidate");
 
 const createUser = async (req, res) => {
+  console.log(req.body)
   const errors = validationResult(req);
+  console.log(errors)
   if (!errors.isEmpty()) {
     return res.status(400).json({ errors: "Algo salió mal" });
   }
 
   try {
     const { email, userName, name, lastName, password } = req.body;
-
+    console.log(req.body)
     const newUser = new User({
       email,
       userName,

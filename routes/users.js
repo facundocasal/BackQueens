@@ -14,9 +14,8 @@ const { isAdmin } = require("../middleware/isAdmin");
 
 route
 .get("/", isAdmin, getUsers)
-.get("/:userName", jwtValidator, getInfoUser);
-
-route.post(
+.get("/:userName", jwtValidator, getInfoUser)
+.post(
   "/",
   body("email").trim().escape().isEmail().not().isEmpty(),
   body("userName")
@@ -38,7 +37,8 @@ route.post(
     .escape()
     .isAlpha("es-ES", { ignore: " " })
     .not()
-    .isLength({ min: 0, max: 25 }),
+    .isEmpty()
+    .isLength({ min: 3, max: 25 }),
   body("password").not().isEmpty().isStrongPassword({ minSymbols: 0 }),
   validateEmail,
   validateUserName,

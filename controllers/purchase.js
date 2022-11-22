@@ -57,7 +57,7 @@ const getGalleryPuchaseUser = async (req, res) => {
     if (!userPurchase || userId == "undefined") {
       const galleryPhotos = await Galeries.findOne(
         { galleryName: galleryName },
-        "photoBlur  photosShow numberPhotos galleryName idQueen"
+        "photoBlur  photosShow numberPhotos galleryName idQueen price price_USD"
       );
       res.json(galleryPhotos);
     } else {
@@ -85,7 +85,7 @@ const createPaymentmercado = async (req, res) => {
       const queenId = await User.findOne({ userName: queen }, "id");
       const { fee_details } = compra.body;
       const newPurchase = {
-        queenId: queenId.id,
+        queenId: queenId._id,
         userId: user_id,
         userName: user_name,
         galleryName: gallery_name,
@@ -96,7 +96,6 @@ const createPaymentmercado = async (req, res) => {
         commission: fee_details[0].amount,
       };
       await Purchase.create(newPurchase);
-      console.log("cree");
       res.status(200).send("ok");
     }
   } catch (error) {

@@ -22,6 +22,7 @@ const validateEmail = async (req, res, next) => {
 
 const validateUserName = async (req, res, next) => {
   const { userName } = req.body;
+
   const isUserName = await User.findOne({ userName });
 
   if (isUserName) {
