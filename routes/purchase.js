@@ -16,7 +16,7 @@ const Purchase = require("../models/purchase");
 
 route
   .get("/", isAdmin, getPurchases)
-  .get("/user/:user/:galleryName", getGalleryPuchaseUser)
+  .get("/user/:userId/:galleryName", getGalleryPuchaseUser)
   .get("/:userId", jwtValidator, getUserOrQueenPurchase)
   .get("/id/:id", isAdmin, getPurchaseById)
   .post("/paypalIpn", jwtValidator, createPaymentpaypal)
