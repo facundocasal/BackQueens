@@ -22,5 +22,4 @@ route
   .post("/paypalIpn", jwtValidator, createPaymentpaypal)
   .post("/ipn", createPaymentmercado)
   .post("/paypal", jwtValidator, paypalOrder)
-  .post("/prueba" , (req , res) => res.status(200).send("ok"))
 module.exports = route;

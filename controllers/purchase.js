@@ -106,13 +106,13 @@ const createPaymentmercado = async (req, res) => {
 // crear compra paypal
 
 const createPaymentpaypal = async (req, res) => {
-  const { userName, userId, galleryName, queen, price_USD } = req.body;
+  const { galleryName, queen, price_USD } = req.body;
 
   const queenId = await User.findOne({ userName: queen }, "id");
 
   try {
     const newPurchase = await new Purchase({
-      queenId: queenId.id,
+      queenId: queenId._id,
       userId: req.userId,
       userName: req.userName,
       galleryName: galleryName,
@@ -122,7 +122,7 @@ const createPaymentpaypal = async (req, res) => {
       method: "PayPal",
     });
     await newPurchase.save();
-    res.status(201).json(newPurchase);
+    res.status(201);
   } catch (err) {
     console.log(err);
   }

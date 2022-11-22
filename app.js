@@ -7,14 +7,6 @@ const logger = require("morgan");
 const cors = require("cors");
 const CronJob = require("cron").CronJob;
 
-const ngrok = require('ngrok');
-
-(async function() {
-  await ngrok.authtoken("2GMqDKjmfzfd0qMON6vBIcQeCMb_3tsVkiEKMK1E5dpXAXfrt");
-  const url = await ngrok.connect(8000);
-  console.log(url)
-})();
-
 const indexRouter = require("./routes/index");
 const userRouter = require("./routes/users");
 const loginRouter = require("./routes/login");
