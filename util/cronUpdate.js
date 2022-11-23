@@ -10,6 +10,7 @@ const ubdateSuscriptcion = async () => {
       await Purchase.updateOne({ _id: e._id }, { $set: { available: false } });
     }
   });
+  console.log(`CronJob realizado dia y horario : ${today.toLocaleString()}`)
 };
 
 module.exports = { ubdateSuscriptcion };
