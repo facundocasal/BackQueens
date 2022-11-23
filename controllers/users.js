@@ -50,7 +50,7 @@ const getInfoUser = async (req, res) => {
   const { userId } = req.params;
   try {
     const userData = await User.findOne(
-      { userId },
+      { _id: userId },
       "email role lastName name id userName"
     );
     res.json(userData);
