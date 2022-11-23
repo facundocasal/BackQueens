@@ -3,6 +3,11 @@ const Galeries = require("../models/galleries");
 const mercadopago = require("mercadopago");
 const paypal = require("@paypal/checkout-server-sdk");
 const User = require("../models/users");
+let clientId = process.env.PAYPAL_CLIENT_ID
+let clientSecret = process.env.PAYPAL_CLIENT_SECRET;
+
+let environment = new paypal.core.SandboxEnvironment(clientId, clientSecret);
+let client = new paypal.core.PayPalHttpClient(environment);
 
 // obtener todas las compras
 
