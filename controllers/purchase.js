@@ -102,7 +102,7 @@ const createPaymentmercado = async (req, res) => {
         commission: fee_details[0].amount,
       };
       await Purchase.create(newPurchase);
-      res.status(200).send("ok");
+      return res.status(200).send("ok");
     }
   } catch (error) {
     console.log(error);
