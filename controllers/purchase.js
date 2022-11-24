@@ -83,6 +83,7 @@ const createPaymentmercado = async (req, res) => {
   try {
     const { id } = req.body.data;
     let compra = await mercadopago.payment.findById(id);
+    console.log(compra);
     const { status, status_detail } = compra.body;
     if (status === "approved" && status_detail === "accredited") {
       const { user_name, user_id, queen, price, gallery_name } =
