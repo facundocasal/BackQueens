@@ -3,7 +3,7 @@ const Galeries = require("../models/galleries");
 const mercadopago = require("mercadopago");
 const paypal = require("@paypal/checkout-server-sdk");
 const User = require("../models/users");
-let clientId = process.env.PAYPAL_CLIENT_ID
+let clientId = process.env.PAYPAL_CLIENT_ID;
 let clientSecret = process.env.PAYPAL_CLIENT_SECRET;
 
 let environment = new paypal.core.SandboxEnvironment(clientId, clientSecret);
@@ -81,27 +81,31 @@ const getGalleryPuchaseUser = async (req, res) => {
 
 const createPaymentmercado = async (req, res) => {
   try {
-    const { id } = req.body.data;
-    console.log(req.body)
-    let compra = await mercadopago.payment.findById(id);
-    const { status, status_detail } = compra.body;
-    if (status === "approved" && status_detail === "accredited") {
-      const { user_name, user_id, queen, price, gallery_name } =
-        compra.body.metadata;
-      const queenId = await User.findOne({ userName: queen }, "id");
-      const { fee_details } = compra.body;
-      const newPurchase = {
-        queenId: queenId._id,
-        userId: user_id,
-        userName: user_name,
-        galleryName: gallery_name,
-        queen: queen,
-        price: price,
-        method: "mercado Pago",
-        available: true,
-        commission: fee_details[0].amount,
-      };
-      await Purchase.create(newPurchase);
+    const { action } = req.body;
+    if (action === "payment.updated") {
+      const { id } = req.body.data;
+      let compra = await mercadopago.payment.findById(id);
+      const { status, status_detail } = compra.body;
+      if (status === "approved" && status_detail === "accredited") {
+        const { user_name, user_id, queen, price, gallery_name } =
+          compra.body.metadata;
+        const queenId = await User.findOne({ userName: queen }, "id");
+        const { fee_details } = compra.body;
+        const newPurchase = {
+          queenId: queenId._id,
+          userId: user_id,
+          userName: user_name,
+          galleryName: gallery_name,
+          queen: queen,
+          price: price,
+          method: "mercado Pago",
+          available: true,
+          commission: fee_details[0].amount,
+        };
+        await Purchase.create(newPurchase);
+        res.status(200).send("ok");
+      }
+    } else {
       res.status(200).send("ok");
     }
   } catch (error) {
