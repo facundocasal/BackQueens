@@ -82,7 +82,7 @@ const getGalleryPuchaseUser = async (req, res) => {
 const createPaymentmercado = async (req, res) => {
   try {
     const { id } = req.body.data;
-    console.loG(req.body)
+    console.log(req.body)
     let compra = await mercadopago.payment.findById(id);
     const { status, status_detail } = compra.body;
     if (status === "approved" && status_detail === "accredited") {
@@ -102,7 +102,7 @@ const createPaymentmercado = async (req, res) => {
         commission: fee_details[0].amount,
       };
       await Purchase.create(newPurchase);
-      return res.status(200).send("ok");
+      res.status(200).send("ok");
     }
   } catch (error) {
     console.log(error);
