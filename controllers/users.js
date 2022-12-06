@@ -92,6 +92,25 @@ const editUser = async (req, res) => {
   try {
     const match = await bcrypt.compare(passOld, user.password);
     if (match) {
+      if (user.role === "queen") {
+        if (password) {
+          const salt = bcrypt.genSaltSync();
+          passwordEncript = bcrypt.hashSync(password, salt);
+          await User.findByIdAndUpdate(
+            { _id: req.userId },
+            {
+              password: passwordEncript,
+            },
+            { new: true }
+          );
+          res.status(200).json({ message: "Contraseña Modificada" });
+        } else {
+          res.json({
+            status: 500,
+            message: "Solo puedes modificar tu contraseña ",
+          });
+        }
+      }
       const userMatchName = await User.findOne({ userName });
       if (userMatchName) {
         if (req.userId != userMatchName._id) {
@@ -136,7 +155,7 @@ const editUser = async (req, res) => {
           },
           { new: true }
         );
-        res.status(200).json({ message: "Usuario Modificado contraseña" });
+        res.status(200).json({ message: "Usuario Modificado y contraseña" });
       }
     } else {
       res.json({ message: "Contraseña incorrecta" });
