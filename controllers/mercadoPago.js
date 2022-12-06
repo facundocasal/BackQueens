@@ -7,8 +7,7 @@ mercadopago.configure({
 
 class MercadoPago {
   createPay = (req, res) => {
-    
-    const { galleryName, queen, price} = req.body;
+    const { galleryName, queen, price } = req.body;
     let preference = {
       payer: {
         email: req.userEmail,

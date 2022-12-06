@@ -4,16 +4,15 @@ const bcrypt = require("bcrypt");
 const { userNameOrEmail } = require("../helpers/loginValidate");
 
 const createUser = async (req, res) => {
-  console.log(req.body)
   const errors = validationResult(req);
-  console.log(errors)
+
   if (!errors.isEmpty()) {
     return res.status(400).json({ errors: "Algo salió mal" });
   }
 
   try {
     const { email, userName, name, lastName, password } = req.body;
-    console.log(req.body)
+
     const newUser = new User({
       email,
       userName,
@@ -89,24 +88,31 @@ const editUser = async (req, res) => {
     return res.status(400).json({ errors: "Algo salió mal" });
   }
   const { email, userName, name, lastName, passOld, password } = req.body;
-  const user = await User.findById(req.userId)
+  const user = await User.findById(req.userId);
   try {
     const match = await bcrypt.compare(passOld, user.password);
-    if(match){
-      const userMatchName = await User.findOne({ userName});
+    if (match) {
+      const userMatchName = await User.findOne({ userName });
       if (userMatchName) {
         if (req.userId != userMatchName._id) {
-          return res.json({ message: "nombre de usuario ya se encuentra registrado", status: 500 } );
+          return res.json({
+            message: "nombre de usuario ya se encuentra registrado",
+            status: 500,
+          });
         }
       }
       const userEmailMatch = await User.findOne({ email: email });
       if (userEmailMatch) {
         if (req.userId != userEmailMatch._id) {
-          return res.json({ message: "email ya se encuentra registrado", status: 500 });
+          return res.json({
+            message: "email ya se encuentra registrado",
+            status: 500,
+          });
         }
       }
       if (!password) {
-        await User.findByIdAndUpdate({_id : req.userId},
+        await User.findByIdAndUpdate(
+          { _id: req.userId },
           {
             email: email,
             userName: userName,
@@ -115,11 +121,12 @@ const editUser = async (req, res) => {
           },
           { new: true }
         );
-         res.status(200).json({ message: "Usuario Modificado" });
+        res.status(200).json({ message: "Usuario Modificado" });
       } else {
         const salt = bcrypt.genSaltSync();
         passwordEncript = bcrypt.hashSync(password, salt);
-        await User.findByIdAndUpdate({_id : req.userId}, 
+        await User.findByIdAndUpdate(
+          { _id: req.userId },
           {
             email: email,
             userName: userName,
@@ -129,68 +136,14 @@ const editUser = async (req, res) => {
           },
           { new: true }
         );
-        console.log(passwordEncript);
         res.status(200).json({ message: "Usuario Modificado contraseña" });
       }
-
-    }else{
-      res.json({message: "Contraseña incorrecta"})
+    } else {
+      res.json({ message: "Contraseña incorrecta" });
     }
   } catch (error) {
-    res.json(error)
+    res.json(error);
   }
-
-  // try {
-  //   const match = await bcrypt.compare(passOld, user.password);
-  //   if (match) {
-  //     const userMatchName = await User.findOne({ userName });
-  //     if (userMatchName) {
-  //       if (id != userMatchName._id) {
-  //         res
-  //           .status(401)
-  //           .json({ message: "nombre de usuario ya se encuentra registrado" });
-  //       }
-  //     }
-  //     const userEmailMatch = await User.findOne({ email: email });
-  //     if (userEmailMatch) {
-  //       if (req.userId != userEmailMatch._id) {
-  //         res
-  //         .status(401)
-  //         .json({ message: "email ya se encuentra registrado" });
-  //       }
-  //     }
-  //     if (!password) {
-  //       await User.findByIdAndUpdate({_id : req.userId},
-  //         {
-  //           email: email,
-  //           userName: userName,
-  //           name: name,
-  //           lastName: lastName,
-  //         },
-  //         { new: true }
-  //       );
-  //       res.status(200).json({ message: "Usuario Modificado" });
-  //     } else {
-  //       const salt = bcrypt.genSaltSync();
-  //       passwordEncript = bcrypt.hashSync(password, salt);
-  //       await User.findByIdAndUpdate({_id : req.userId}, 
-  //         {
-  //           email: email,
-  //           userName: userName,
-  //           name: name,
-  //           lastName: lastName,
-  //           password: passwordEncript,
-  //         },
-  //         { new: true }
-  //       );
-  //       res.status(200).json({ message: "Usuario Modificado" });
-  //     }
-  //   } else {
-  //     res.status(401).json({ message: "credenciales incorrectas" });
-  //   }
-  // } catch (error) {
-  //   console.log(error);
-  // }
 };
 
 module.exports = { createUser, getUsers, deleteUser, getInfoUser, editUser };
